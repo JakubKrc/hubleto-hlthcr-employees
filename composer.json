@@ -1,6 +1,6 @@
 {
     "name": "wai-blue/hubleto-hlthcr-employees",
-    "license": "MIT",
+    "license": "proprietary",
     "description": "Hlthcr for Hubleto: Employees of the branches with end date, archive and the daily end-date job",
     "require": {
         "wai-blue/hubleto-hlthcr-core": "dev-main",
