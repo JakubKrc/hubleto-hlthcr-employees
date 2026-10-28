@@ -25,7 +25,8 @@
         "Inactive (archive)": "Neaktívni (archív)",
         "Last medical exam": "Posledná lekárska prehliadka",
         "Medical exam valid to": "Platnosť lekárskej prehliadky do",
-        "The employee becomes inactive the day after the end date.": "Zamestnanec bude neaktívny deň po dátume výstupu."
+        "The employee becomes inactive the day after the end date.": "Zamestnanec bude neaktívny deň po dátume výstupu.",
+        "The job position is not one of the employee's branch.": "Pracovná pozícia nepatrí k prevádzke zamestnanca."
     },
     "Controllers\\Home": {
         "Employees": "Zamestnanci",

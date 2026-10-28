@@ -3,6 +3,8 @@
 namespace Hubleto\App\External\WaiBlue\HlthcrEmployees\Models;
 
 use Hubleto\App\External\WaiBlue\HlthcrCore\Models\Traits\EmptyDatesAsNull;
+use Hubleto\App\External\WaiBlue\HlthcrCore\Models\Traits\UsesStoredValues;
+use Hubleto\Framework\Exceptions\RecordSaveException;
 use Hubleto\App\External\WaiBlue\HlthcrBranches\Models\Branch;
 use Hubleto\App\External\WaiBlue\HlthcrBranches\Models\Job;
 use Hubleto\App\External\WaiBlue\HlthcrMedicalExams\Models\Exam;
@@ -20,6 +22,7 @@ use Hubleto\Framework\Db\Column\Virtual;
 class Employee extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrModel
 {
   use EmptyDatesAsNull;
+  use UsesStoredValues;
   public string $table = 'hlthcr_employees';
   public string $recordManagerClass = RecordManagers\Employee::class;
   public ?string $lookupSqlValue = 'concat({%TABLE%}.name, ifnull(concat(" (", date_format({%TABLE%}.date_of_birth, "%d.%m.%Y"), ")"), ""))';
@@ -126,6 +129,7 @@ class Employee extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrMod
   {
     $record = parent::onBeforeCreate($record);
     $record = $this->emptyDatesAsNull($record);
+    $this->refuseJobOfOtherBranch($record);
     $record['is_active'] = $this->isEmployeeActive($record);
     return $record;
   }
@@ -134,8 +138,23 @@ class Employee extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrMod
   {
     $record = parent::onBeforeUpdate($record);
     $record = $this->emptyDatesAsNull($record);
+    $record = $this->addStoredValuesOfMissingColumns($record, ['id_branch', 'id_job', 'date_terminated']);
+    $this->refuseJobOfOtherBranch($record);
     $record['is_active'] = $this->isEmployeeActive($record);
     return $record;
+  }
+
+  // Both legacy apps offer only the job positions of the employee's branch; the server checks it too.
+  private function refuseJobOfOtherBranch(array $record): void
+  {
+    $idJob = (int) ($record['id_job'] ?? 0);
+    if ($idJob <= 0) return;
+
+    $job = $this->getModel(Job::class)->record->where('id', $idJob)->first();
+    $isJobOfBranch = $job && (int) $job->id_branch == (int) ($record['id_branch'] ?? 0);
+    if (!$isJobOfBranch) {
+      throw new RecordSaveException($this->translate('The job position is not one of the employee\'s branch.'));
+    }
   }
 
   /**
