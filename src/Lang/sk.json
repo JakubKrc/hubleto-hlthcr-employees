@@ -26,7 +26,8 @@
         "Last medical exam": "Posledná lekárska prehliadka",
         "Medical exam valid to": "Platnosť lekárskej prehliadky do",
         "The employee becomes inactive the day after the end date.": "Zamestnanec bude neaktívny deň po dátume výstupu.",
-        "The job position is not one of the employee's branch.": "Pracovná pozícia nepatrí k prevádzke zamestnanca."
+        "The job position is not one of the employee's branch.": "Pracovná pozícia nepatrí k prevádzke zamestnanca.",
+        "An employee can move only to another branch of the same client.": "Zamestnanec môže prejsť len na inú prevádzku toho istého klienta."
     },
     "Controllers\\Home": {
         "Employees": "Zamestnanci",

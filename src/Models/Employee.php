@@ -139,9 +139,29 @@ class Employee extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrMod
     $record = parent::onBeforeUpdate($record);
     $record = $this->emptyDatesAsNull($record);
     $record = $this->addStoredValuesOfMissingColumns($record, ['id_branch', 'id_job', 'date_terminated']);
+    $this->refuseMoveToOtherClient($record);
     $this->refuseJobOfOtherBranch($record);
     $record['is_active'] = $this->isEmployeeActive($record);
     return $record;
+  }
+
+  // The exams go with the employee, so a move to a branch of another client would give them to that client.
+  // One legacy app keeps the branch as created; here a move within the same client is allowed.
+  private function refuseMoveToOtherClient(array $record): void
+  {
+    $storedEmployee = $this->record->where('id', (int) ($record['id'] ?? 0))->first();
+    if (!$storedEmployee) return;
+
+    $idNewBranch = (int) ($record['id_branch'] ?? 0);
+    if ($idNewBranch == (int) $storedEmployee->id_branch) return;
+
+    $mBranch = $this->getModel(Branch::class);
+    $storedBranch = $mBranch->record->where('id', (int) $storedEmployee->id_branch)->first();
+    $newBranch = $mBranch->record->where('id', $idNewBranch)->first();
+    $isSameClient = $storedBranch && $newBranch && (int) $storedBranch->id_customer == (int) $newBranch->id_customer;
+    if (!$isSameClient) {
+      throw new RecordSaveException($this->translate('An employee can move only to another branch of the same client.'));
+    }
   }
 
   // Both legacy apps offer only the job positions of the employee's branch; the server checks it too.
