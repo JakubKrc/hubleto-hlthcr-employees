@@ -1,0 +1,18 @@
+{% set buttons = [
+  ['hlthcr-employees/employees', 'fas fa-users', translate('Employees')],
+  [viewParams.archiveUrl, 'fas fa-box-archive', translate('Archive')],
+] %}
+
+<div class="flex gap-2 flex-wrap flex-col m-auto card mt-24">
+  <div class="card-header">
+    <h1 class="app-main-title">{{ translate('Employees') }}</h1>
+  </div>
+  <div class="card-body gap-2 flex-wrap grid md:grid-cols-2">
+    {% for button in buttons %}
+      <a href="{{ config.projectUrl }}/{{ button[0] }}" class="btn btn-square btn-large btn-transparent">
+        <span class="icon"><i class="{{ button[1] }}"></i></span>
+        <span class="text">{{ button[2] }}</span>
+      </a>
+    {% endfor %}
+  </div>
+</div>

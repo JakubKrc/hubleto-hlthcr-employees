@@ -1,0 +1,48 @@
+{
+    "manifest": {
+        "Employees": "Zamestnanci",
+        "Employees of client branches, with their job position. Medical exams will be added later.": "Zamestnanci prevádzok klientov a ich pracovné pozície. Lekárske prehliadky pribudnú neskôr.",
+        "Archive": "Archív",
+        "Settings": "Nastavenia"
+    },
+    "Models\\Employee": {
+        "Name and surname": "Meno a priezvisko",
+        "Date of birth": "Dátum narodenia",
+        "Personal number": "Osobné číslo",
+        "Branch": "Prevádzka",
+        "Job position": "Pracovná pozícia",
+        "Work category": "Kategória práce",
+        "Street": "Ulica",
+        "City": "Mesto",
+        "Postal code": "PSČ",
+        "E-mail": "E-mail",
+        "Phone": "Telefón",
+        "Start date": "Dátum nástupu",
+        "End date": "Dátum výstupu",
+        "Note": "Poznámka",
+        "Active": "Aktívny",
+        "Add employee": "Pridať zamestnanca",
+        "Inactive (archive)": "Neaktívni (archív)",
+        "Last medical exam": "Posledná lekárska prehliadka",
+        "Medical exam valid to": "Platnosť lekárskej prehliadky do",
+        "The employee becomes inactive the day after the end date.": "Zamestnanec bude neaktívny deň po dátume výstupu."
+    },
+    "Controllers\\Home": {
+        "Employees": "Zamestnanci",
+        "Archive": "Archív"
+    },
+    "Components\\FormEmployee": {
+        "Personal data": "Osobné údaje",
+        "Employment": "Pracovný pomer",
+        "Employee": "Zamestnanec"
+    },
+    "Loader": {
+        "Employees": "Zamestnanci",
+        "Save the branch first.": "Najprv uložte prevádzku."
+    },
+    "Controllers\\Settings": {
+        "Employees": "Zamestnanci",
+        "Settings": "Nastavenia",
+        "An employee is active until the end date has passed and while the branch is active. A daily job moves employees after their end date to the archive.": "Zamestnanec je aktívny, kým neuplynie dátum výstupu a kým je prevádzka aktívna. Denná úloha presúva zamestnancov po dátume výstupu do archívu."
+    }
+}

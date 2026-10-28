@@ -1,0 +1,13 @@
+namespace: Hubleto\App\External\WaiBlue\HlthcrEmployees
+appType: external
+sidebarGroup: custom
+rootUrlSlug: hlthcr-employees
+name: Employees
+icon: fas fa-users
+author:
+  name: "Hlthcr"
+  nick: "hlthcr"
+highlight: Employees of client branches, with their job position. Medical exams will be added later.
+requires:
+  - Hubleto\App\External\WaiBlue\HlthcrCore
+  - Hubleto\App\External\WaiBlue\HlthcrBranches
