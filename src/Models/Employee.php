@@ -130,6 +130,7 @@ class Employee extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrMod
     $record = parent::onBeforeCreate($record);
     $record = $this->emptyDatesAsNull($record);
     $this->refuseJobOfOtherBranch($record);
+    $this->refuseDuplicateInClient($record);
     $record['is_active'] = $this->isEmployeeActive($record);
     return $record;
   }
@@ -138,9 +139,10 @@ class Employee extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrMod
   {
     $record = parent::onBeforeUpdate($record);
     $record = $this->emptyDatesAsNull($record);
-    $record = $this->addStoredValuesOfMissingColumns($record, ['id_branch', 'id_job', 'date_terminated']);
+    $record = $this->addStoredValuesOfMissingColumns($record, ['id_branch', 'id_job', 'date_terminated', 'name', 'date_of_birth']);
     $this->refuseMoveToOtherClient($record);
     $this->refuseJobOfOtherBranch($record);
+    $this->refuseDuplicateInClient($record);
     $record['is_active'] = $this->isEmployeeActive($record);
     return $record;
   }
@@ -161,6 +163,28 @@ class Employee extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrMod
     $isSameClient = $storedBranch && $newBranch && (int) $storedBranch->id_customer == (int) $newBranch->id_customer;
     if (!$isSameClient) {
       throw new RecordSaveException($this->translate('An employee can move only to another branch of the same client.'));
+    }
+  }
+
+  // One legacy app has name and date of birth unique; here only within a client, as a person may work for two clients.
+  private function refuseDuplicateInClient(array $record): void
+  {
+    $dateOfBirth = (string) ($record['date_of_birth'] ?? '');
+    if ($dateOfBirth == '') return;
+
+    $branch = $this->getModel(Branch::class)->record->where('id', (int) ($record['id_branch'] ?? 0))->first();
+    if (!$branch) return;
+
+    $duplicateExists = $this->record
+      ->join('hlthcr_branches', 'hlthcr_branches.id', '=', 'hlthcr_employees.id_branch')
+      ->where('hlthcr_branches.id_customer', (int) $branch->id_customer)
+      ->where('hlthcr_employees.name', trim((string) ($record['name'] ?? '')))
+      ->where('hlthcr_employees.date_of_birth', $dateOfBirth)
+      ->where('hlthcr_employees.id', '<>', (int) ($record['id'] ?? 0))
+      ->exists()
+    ;
+    if ($duplicateExists) {
+      throw new RecordSaveException($this->translate('The client already has an employee with this name and date of birth.'));
     }
   }
 
