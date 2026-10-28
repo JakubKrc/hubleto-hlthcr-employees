@@ -87,7 +87,7 @@ class Loader extends \Hubleto\App\External\WaiBlue\HlthcrCore\HlthcrApp
     return 0;
   }
 
-  public function generateDemoData(): void
+  public function generateHlthcrDemoData(): void
   {
     /** @var Models\Employee */
     $mEmployee = $this->getModel(Models\Employee::class);
@@ -131,10 +131,13 @@ class Loader extends \Hubleto\App\External\WaiBlue\HlthcrCore\HlthcrApp
         $extraDaysOfAge = $index * 40;
         $dateOfBirth = date('Y-m-d', strtotime('-' . $ageInYears . ' years -' . $extraDaysOfAge . ' days'));
 
+        // "D1-3": demo branch 1, employee 3. Numbered by demo branch, as Hubleto's demo data takes the first branch ids.
+        $personalNumber = 'D' . ($branchIndex + 1) . '-' . ($index + 1);
+
         $mEmployee->record->recordCreate([
           'name' => $demoName,
           'date_of_birth' => $dateOfBirth,
-          'personal_number' => 'D' . $branch->id . '-' . ($index + 1),
+          'personal_number' => $personalNumber,
           'id_branch' => $branch->id,
           'id_job' => $job->id,
           'city' => $branch->city,
