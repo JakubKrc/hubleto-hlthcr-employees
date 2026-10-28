@@ -37,7 +37,7 @@ class Employee extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrMod
       'date_of_birth' => (new Date($this, $this->translate('Date of birth')))->setRequired()->setDefaultVisible(),
       'personal_number' => (new Varchar($this, $this->translate('Personal number')))->setDefaultVisible(),
       'id_branch' => (new Lookup($this, $this->translate('Branch'), Branch::class))->setRequired()->setDefaultVisible(),
-      'id_job' => (new Lookup($this, $this->translate('Job position'), Job::class, 'SET NULL'))->setDefaultVisible(),
+      'id_job' => (new Lookup($this, $this->translate('Job position'), Job::class, 'RESTRICT'))->setDefaultVisible(),
       'virt_work_category' => (new Virtual($this, $this->translate('Work category')))
         ->setDefaultVisible()
         ->setProperty('sql', 'select (' . Job::getWorkCategorySql('hlthcr_employees.id_job') . ')')

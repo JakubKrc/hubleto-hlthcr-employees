@@ -5,11 +5,13 @@ namespace Hubleto\App\External\WaiBlue\HlthcrEmployees\Models\RecordManagers;
 use Hubleto\App\External\WaiBlue\HlthcrBranches\Models\RecordManagers\Branch;
 use Hubleto\App\External\WaiBlue\HlthcrBranches\Models\RecordManagers\Job;
 use Hubleto\App\External\WaiBlue\HlthcrBranches\Models\RecordManagers\Traits\BelongsToBranch;
+use Hubleto\App\External\WaiBlue\HlthcrCore\Models\RecordManagers\Traits\OffersActiveRecords;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Employee extends \Hubleto\Erp\RecordManager
 {
   use BelongsToBranch;
+  use OffersActiveRecords;
 
   public $table = 'hlthcr_employees';
 
@@ -38,10 +40,13 @@ class Employee extends \Hubleto\Erp\RecordManager
   public function prepareLookupQuery(string $search): mixed
   {
     $query = parent::prepareLookupQuery($search);
-
-    // Dropdowns offer active employees only, as in both legacy apps (a chosen one still shows in its form).
-    $query = $query->where($this->table . '.is_active', 1);
     return $this->restrictToVisibleBranches($query);
+  }
+
+  // Dropdowns offer active employees only, as in both legacy apps.
+  public function restrictToOfferedRecords(mixed $query): mixed
+  {
+    return $this->restrictToActiveOrChosen($query, 'id_employee');
   }
 
   public function addUrlFiltersToQuery(mixed $query): mixed
