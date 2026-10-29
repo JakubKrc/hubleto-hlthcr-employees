@@ -1,5 +1,6 @@
+import React from 'react';
 import Translator from '@hubleto/react-ui/core/Translator';
-import Form from '@hubleto/react-ui/components/fc/Form';
+import Form, { FormMetaContext } from '@hubleto/react-ui/components/fc/Form';
 import { type FormProps } from '@hubleto/react-ui/components/fc/FormInterfaces';
 import Input from '@hubleto/react-ui/components/fc/FormComponents/Input';
 import { useRecordField } from '@hubleto/react-ui/components/fc/FormRecordStore';
@@ -11,7 +12,18 @@ const T = new Translator(parentApp + '/Loader', 'Components/' + componentName);
 // The job dropdown offers only jobs of the selected branch. Hubleto FC lookups do not send the form values,
 // so the branch goes into the lookup request ("myself" is how FC inputs accept extra request params).
 const InputJobOfSelectedBranch = () => {
+  const form = React.useContext(FormMetaContext);
   const idBranch = useRecordField('id_branch', 0);
+  const previousIdBranch = React.useRef(idBranch);
+
+  // A job belongs to one branch, so moving to another branch clears it (as one legacy app does).
+  // The first branch, set when the record loads, keeps the job.
+  React.useEffect(() => {
+    const isMovedToAnotherBranch = Number(previousIdBranch.current) > 0 && previousIdBranch.current != idBranch;
+    previousIdBranch.current = idBranch;
+    if (isMovedToAnotherBranch) form.changeRecord({id_job: null});
+  }, [idBranch]);
+
   return <Input
     key={'job-of-branch-' + idBranch}
     field='id_job'
