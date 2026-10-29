@@ -7,7 +7,7 @@ icon: fas fa-users
 author:
   name: "Hlthcr"
   nick: "hlthcr"
-highlight: Employees of client branches, with their job position. Medical exams will be added later.
+highlight: Employees of client branches, with their job position and the state of their medical exams.
 requires:
   - Hubleto\App\External\WaiBlue\HlthcrCore
   - Hubleto\App\External\WaiBlue\HlthcrBranches

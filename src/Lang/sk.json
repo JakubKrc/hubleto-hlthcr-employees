@@ -1,9 +1,9 @@
 {
     "manifest": {
         "Employees": "Zamestnanci",
-        "Employees of client branches, with their job position. Medical exams will be added later.": "Zamestnanci prevádzok klientov a ich pracovné pozície. Lekárske prehliadky pribudnú neskôr.",
         "Archive": "Archív",
-        "Settings": "Nastavenia"
+        "Settings": "Nastavenia",
+        "Employees of client branches, with their job position and the state of their medical exams.": "Zamestnanci prevádzok klientov, ich pracovné pozície a stav ich lekárskych prehliadok."
     },
     "Models\\Employee": {
         "Name and surname": "Meno a priezvisko",
