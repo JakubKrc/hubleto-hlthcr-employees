@@ -18,7 +18,7 @@ class BranchChanges extends \Hubleto\Framework\EventListener implements \Hubleto
     if (!($model instanceof Branch) && !($model instanceof Customer)) return;
 
     $wasActive = (bool) ($originalRecord['is_active'] ?? true);
-    $isActive = (bool) ($savedRecord['is_active'] ?? true);
+    $isActive = (bool) ($savedRecord['is_active'] ?? $wasActive);
 
     /** @var Employee */
     $mEmployee = $this->getModel(Employee::class);
