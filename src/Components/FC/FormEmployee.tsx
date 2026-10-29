@@ -31,7 +31,11 @@ const InputJobOfSelectedBranch = () => {
   />;
 }
 
-const TabDefault = () => <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+// A new employee added in the branch's tab stays in that branch (both legacy apps); a saved one may move.
+const TabDefault = () => {
+  const form = React.useContext(FormMetaContext);
+  const isNewInGivenBranch = form.id <= 0 && Number(form.description?.defaultValues?.id_branch ?? 0) > 0;
+  return <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
   <div>
     <h3 className='text-lg mb-2'>{T.translate('Personal data')}</h3>
     <Input field='name' />
@@ -45,7 +49,7 @@ const TabDefault = () => <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
   </div>
   <div>
     <h3 className='text-lg mb-2'>{T.translate('Employment')}</h3>
-    <Input field='id_branch' />
+    <Input field='id_branch' readonly={isNewInGivenBranch} />
     <InputJobOfSelectedBranch />
     <Input field='date_hired' />
     <Input field='date_terminated' />
@@ -53,6 +57,7 @@ const TabDefault = () => <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
     <Input field='note' />
   </div>
 </div>;
+}
 
 const FormEmployee = (props: FormProps) => <Form
   componentName={componentName}

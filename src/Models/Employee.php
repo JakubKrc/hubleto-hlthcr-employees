@@ -98,6 +98,8 @@ class Employee extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrMod
     $description->ui['addButtonText'] = $this->translate('Add employee');
     $description->show(['header', 'fulltextSearch', 'columnSearch', 'moreActionsButton']);
     $description->hide(['footer']);
+    // In the branch's tab the branch is known, so its column is left out (both legacy apps).
+    if ($this->router()->urlParamAsInteger('idBranch') > 0) $description->hideColumns(['id_branch']);
 
     $description->addFilter(RecordManagers\Employee::STATUS_FILTER, [
       'title' => $this->translate('Active'),
